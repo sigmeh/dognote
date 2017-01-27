@@ -1,0 +1,102 @@
+
+<html>
+<head>
+	<meta charset='utf-8'></meta>		
+</head>
+<body>
+
+
+		<div id='calendar' class='cal_class calendar border'>
+			<h4 id='cal_header' class='cal_class calendar'></h4><br>
+			
+			<div id='cal_left' class='cal_class cal_arrow'></div>
+				<div id='cal_inner' class='cal_class calendar'></div>
+			<div id='cal_right' class='cal_class cal_arrow'></div>	
+		</div>
+
+		<style>
+			.cal_class{
+				vertical-align:top;
+				
+			}
+			#calendar{
+				border-radius:12px;
+				position:absolute;
+				background-color:white;
+			}
+			.cal_arrow{
+				display:inline-block;
+				margin:1px;
+				margin-top:40px;
+				cursor: pointer;	
+			}
+			#cal_left{
+				
+				border-right: 	20px solid green;
+				border-bottom: 	16px solid transparent;	
+				border-top:		16px solid transparent;
+			}
+			#cal_right{
+				border-left: 	20px solid green;
+				border-bottom: 	16px solid transparent;	
+				border-top:		16px solid transparent;
+			}
+			.calendar{
+				padding-bottom:0px;
+				padding:3px;
+				margin:0px;
+				display:inline-block;
+				text-align:center;
+			}
+			.cal_box{
+				height:18px;
+				width:22px;
+				display:inline-block;
+				margin:1px;
+				text-align:center;
+				
+				cursor:pointer;
+				padding:1px;
+			}
+			.cal_box:hover{
+				background-color:rgb(250,240,230);
+			}
+			.border{
+				border-style:solid;
+				border-color:black;
+				border-width:1px;
+				margin:1px;
+			}
+			
+		</style>
+
+		<script>
+			$('.cal_arrow').click(function(){
+				year = $('#cal_header').html().split(' ');
+				con(year);
+			});
+		
+			
+			(function(){
+				for (i=0; i<42; i++){
+					var id = 'cal_box'+i
+					$('#cal_inner').append('<div id='+id+' class="cal_box border"></div>');
+					if ((i+1) % 7 == 0 && i != 0){
+						$('#cal_inner').append('<br>');
+					}
+				}
+				/*
+				$.ajax({
+					method:'post',
+					url:'dogcal.py',
+					data:'now',
+					success(function(result){
+						
+					}	
+				});
+				*/			
+				
+			})();
+		</script>
+</body>
+</html>

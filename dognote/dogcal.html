@@ -54,12 +54,11 @@
 				display:inline-block;
 				margin:1px;
 				text-align:center;
-				
-				cursor:pointer;
 				padding:1px;
 			}
-			.cal_box:hover{
+			.cal_box_numbered:hover{
 				background-color:rgb(250,240,230);
+				cursor:pointer;
 			}
 			.border{
 				border-style:solid;
@@ -83,6 +82,9 @@
 					$('#cal_inner').append('<div id='+id+' class="cal_box border"></div>');
 					if ((i+1) % 7 == 0 && i != 0){
 						$('#cal_inner').append('<br>');
+					}
+					if (i>6){
+						$('#'+id).addClass('cal_box_numbered');
 					}
 				}
 				/*

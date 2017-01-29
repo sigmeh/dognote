@@ -72,9 +72,10 @@
 		<script>
 			$('.cal_arrow').click(function(){
 				year = $('#cal_header').html().split(' ');
-				con(year);
+				
 			});
-		
+			
+			
 			
 			(function(){
 				for (i=0; i<42; i++){
@@ -90,13 +91,32 @@
 				/*
 				$.ajax({
 					method:'post',
-					url:'dogcal.py',
-					data:'now',
+					url:'dog.py',
+					data:'yes',
 					success(function(result){
+						//print(result);
+						/*
+						cal = JSON.parse(result);
+						$('#cal_header').html( cal[0] );
+						for (i=0; i<42; i++){
+							if (i < 7){
+								$('#cal_box'+i).html(cal[1][i]);
+							}
+							else{
+								$('#cal_box'+i).html(cal[2][i-7][1]);
+							
+								$('#cal_box'+i).append(
+									'<div class="cal_box_date_data">'+String(cal[2][i-7])+'</div>'
+								);
+							}
+							
+						}
 						
 					}	
+					
 				});
-				*/			
+				*/
+							
 				
 			})();
 		</script>

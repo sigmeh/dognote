@@ -2,158 +2,14 @@
 <html>
 <head>
 	<meta charset='utf-8'>		
-	
-	<script>
-		//$('textarea').attr('autocomplete','off');
-	</script>
-	<script type='text/javascript' src='http://localhost:8000/static/jquery2.2.3.min.js'></script>
-	
-	<link rel='stylesheet' type='text/css' href='http://localhost:8000/static/dognote.css'></link>
-	
-	
-	
-	<script type='text/javascript' src='http://localhost:8000/static/dognote.js'></script>
-	
-	<!--	
-	<script type='text/javascript' src='http://localhost:8000/static/angular1.4.5.min.js'></script>
-	<script type='text/javascript' src='https://code.jquery.com/jquery-2.1.3.js'></script>
-	
-	-->
-	<title>dognote</title>
-	
-	
-	
-	<style>
-		
-	</style>
-	<script>
-		function print(msg){$('#msgbox').append(msg);}	
-		function con(msg){console.log(msg)};
-		
-		$(document).ready(function(){
-		
-		});
-		
-		
-		var cal_showing = false;
-		
-//SET MEETING
-		function set_meeting(id){
-			$('#dogcal_popup').show();
-			
-			if (!cal_showing){
-				$('#'+id).select();
-			
-				info = {'instructions':'load_html dogcal.html', 'date':'now'};
-			
-				$.ajax({
-					method:'post',
-					url:'dognote.py',
-					data: {'package': JSON.stringify(info)},
-					success:function(result){
-						//print(result);
-						
-						
-						result = JSON.parse(result);
-						html = result['html'];
-						cal = result['cal'];
-						//print(html);
-						
-						
-						$('#dogcal_popup').append(html);
-						//scripts = $('#dogcal_popup . script');
-						//con(scripts);
-						
-						$('#calendar').css({
-							'margin-left':mouseX+'px',
-							'margin-top':mouseY+'px'
-						});
-						
-						
-						
-						$('#cal_header').html(cal[0]);
-						//con('fuck ');
-						for (i=0; i<42; i++){
-							if (i < 7){
-								$('#cal_box'+i).html(cal[1][i]);
-							}
-							else{
-								$('#cal_box'+i).html(cal[2][i-7][1]);
-							
-								$('#cal_box'+i).append(
-									'<div class="cal_box_date_data">'+String(cal[2][i-7])+'</div>'
-								);
-							}
-							
-						}
-						
-						cal_showing = true;
-						
-					}
-				});
-			}
-		
-		}
-		
-		
-		$(document).on('click','#new_note',function(){
-			$(this).addClass('note_expanded');
-		});
 
-		$(document).on('click','#expand_note',function(){
-			$('#new_note').toggleClass('note_expanded');
-			if ( $('#new_note').hasClass('note_expanded') ){
-				$('#new_note').css({'text-align':'left'});
-			}
-			else{
-				if ( $('#new_note').val() == 'Note'){
-					$('#new_note').css({'text-align':'center'});
-				}
-				
-				
-			}
-		});
-			
-		
-	var months = 'January February March April May June July August September October November December'.split(' ');	
-		
-		
-//get key id		
-		
-		$(document).on('click','.cal_box_numbered',function(){
-			d = $(this).children()[0].innerHTML.split(',')
-			month = d[0];
-			day = d[1];
-			year = d[2];
-			
-			$('#set_meeting').val(month+' / '+day+' / '+year);
-			
-			//$('#dogcal_popup').css({'display':'none'});
-			$('#dogcal_popup').hide();
-		});
-		
-		$('.cal_box_numbered').click(function(){
-			
-		});
-		
-		var mouseX = 0, mouseY = 0;
-		$(document).on('mousemove',function(e){
-			mouseX = e.pageX;
-			mouseY = e.pageY;
-		});
-		
-		
-		$(window).click(function(){
-			con( $(this) );
-			/*
-			if ( ! $('#dogcal_popup').css({'display':'none'}) ){
-				$('#dogcal_popup').css({'display':'none'});
-			}
-			*/
-		});
-		
-		
-	</script>
+	<link rel='stylesheet' type='text/css' href='http://localhost:8000/static/dognote.css'></link>
+
+	<script type='text/javascript' src='http://localhost:8000/static/jquery2.2.3.min.js'></script>
+	<script type='text/javascript' src='http://localhost:8000/static/dognote.js'></script>
+
+	<title>dognote</title>
+
 </head>
 <body>
 
@@ -162,57 +18,21 @@
 	<div id='container'>
 
 		<div id='add_form'>
+		
 			<button id='add_person' class='add_form'>Add</button>
+			
 			<textarea id='new_name' class='add_form' autocomplete='off' onclick=this.select()>Name</textarea>
-			<textarea id='set_meeting' class='add_form' autocomplete='off' onclick=set_meeting(this.id)>Set meeting</textarea>
+			<textarea id='set_meeting' class='add_form' autocomplete='off' onclick=show_cal(this.id)>Set meeting</textarea>
+			
 			<button id='expand_note'>+/-</button>
-			<textarea id='new_note' class='add_form' autocomplete='off'>Note</textarea>
+			<span id='checkbox_ribbon'></span>
+			<textarea id='new_note' class='add_form note current_note' autocomplete='off'>Note</textarea>
 			
 		</div>
 	</div>
 	
 		
 	<div id='msgbox'></div>
-	
-	<style>
-		
-		.cal_box_date_data{
-			display:none;
-		}
-		.note_expanded{
-			width:500px;
-			height:600px;
-			
-		}
-		#dogcal_popup{
-			display:none;
-		}
-		.add_form{
-			display:inline-block;
-			
-		}
-		textarea{
-			height:16px;
-			text-align:center;
-			padding:3px;
-			resize:none;
-			width:150px;
-		}	
-		
-		*{
-			vertical-align:top;
-			
-		}
-		.border{
-			border-style:solid;
-			border-color:black;
-			border-width:1px;
-		}
-		#new_note{
-			resize:both;
-		}
-		
-	</style>
 	
 	
 </body>

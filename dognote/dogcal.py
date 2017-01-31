@@ -10,7 +10,6 @@ import sys
 import cStringIO
 
 
-
 def get_cal(year,month,c):
 	'''grab and return output from calendar.TextCalendar (which otherwise prints to stdout)'''
 	stdout_ = sys.stdout 		# Keep track of the previous value.
@@ -29,14 +28,16 @@ def format_cal(cal,month,year):
 			cal[line] = [y for y in cal[line].split(' ') if y]
 		if line > 1:
 			cal[line] = [[month,day,year] for day in cal[line].split(' ') if day]
-	#print cal
 	return cal
 
 def main(**kwargs):
 	
 	if kwargs:
-		year = kwargs['year']
-		month = kwargs['month']
+		try:
+			year = kwargs['year']
+			month = kwargs['month']
+		except:
+			return 'Warning: bad keyword arguments to dogcal.py'
 	else:
 		year,month,day = [int(x) for x in str(dt.now()).split(' ')[0].split('-')]
 	
@@ -59,7 +60,6 @@ def main(**kwargs):
 	'''adjust cal to fill in month grid with extra days'''
 	
 	
-	
 	if len(cal[2]) < 7: 
 		cal[2] = prev_cal[-1] + cal[2] 
 	if len(cal[-1]) < 7:
@@ -69,10 +69,7 @@ def main(**kwargs):
 	
 	cal[2] = cal[2]+cal[3]+cal[4]+cal[5]+cal[6]
 	cal = cal[:3]
-	#cal = cal[0] + [x for x in cal[1:]]
 	
-	#for i in cal:
-	#	print i
 	return cal
 
 if __name__ == '__main__':

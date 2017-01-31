@@ -1,0 +1,51 @@
+.cal_class{
+	vertical-align:top;
+	
+}
+#calendar{
+	border-radius:12px;
+	position:absolute;
+	background-color:white;
+}
+.cal_arrow{
+	display:inline-block;
+	margin:1px;
+	margin-top:40px;
+	cursor: pointer;	
+}
+#cal_left{
+	
+	border-right: 	20px solid green;
+	border-bottom: 	16px solid transparent;	
+	border-top:		16px solid transparent;
+}
+#cal_right{
+	border-left: 	20px solid green;
+	border-bottom: 	16px solid transparent;	
+	border-top:		16px solid transparent;
+}
+.calendar{
+	padding-bottom:0px;
+	padding:3px;
+	margin:0px;
+	display:inline-block;
+	text-align:center;
+}
+.cal_box{
+	height:18px;
+	width:22px;
+	display:inline-block;
+	margin:1px;
+	text-align:center;
+	padding:1px;
+}
+.cal_box_numbered:hover{
+	background-color:rgb(250,240,230);
+	cursor:pointer;
+}
+.border{
+	border-style:solid;
+	border-color:black;
+	border-width:1px;
+	margin:1px;
+}

@@ -1,0 +1,41 @@
+.cal_box_date_data{
+	display:none;
+}
+.note_expanded{
+	width:500px;
+	height:600px;
+	
+}
+#dogcal_popup{
+	display:none;
+}
+.add_form{
+	display:inline-block;
+	
+}
+textarea{
+	height:16px;
+	text-align:center;
+	padding:3px;
+	resize:none;
+	width:150px;
+}	
+
+*{
+	vertical-align:top;
+	
+}
+.border{
+	border-style:solid;
+	border-color:black;
+	border-width:1px;
+}
+#new_note{
+	resize:both;
+}
+#checkbox_ribbon{
+	background-color:yellow;
+	width:25px;
+	display:inline-block;
+	height:30px;
+}

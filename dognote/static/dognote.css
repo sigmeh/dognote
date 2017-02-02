@@ -40,6 +40,7 @@
 	display:inline-block;
 	text-align:center;
 	margin:0px;
+	background-color:rgb(240,244,250);
 }
 .checkbox{
 	height:18px;
@@ -59,16 +60,20 @@
 	border-width:1px;
 	margin:0px;
 	vertical-align:top;
+	z-index:-100;
+}
+#note_liner{
+
 }
 .note_line{
 	resize:none;
-	display:block;
+	display:inline-block;
 	margin:0px;
 	height:14px;
 	border-width:1px;
 	padding:0px;
 	width:50px;
-	margin-left:-4px;
+	margin-left:-2px;
 }
 #note_lines_box{
 	display:inline-block;

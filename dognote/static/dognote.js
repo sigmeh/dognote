@@ -7,7 +7,7 @@ var cal_showing = false;
 var mouseX = 0, mouseY = 0;
 var note_height = $('.current_note').height();
 
-//---------------------- load dogcal.html --------------------//		
+//---------------------- LOAD CALENDAR --------------------//		
 function load_cal_html(){
 	info = {'instructions':'load_html dogcal.html'};
 	
@@ -27,7 +27,7 @@ function load_cal_html(){
 	});
 }
 
-//---------------------- show calendar --------------------//	
+//---------------------- SHOW CALENDAR --------------------//	
 function show_cal(id){
 	
 	if (!cal_showing){
@@ -43,19 +43,22 @@ function show_cal(id){
 	}
 }
 
-//		
-//---------------------- BUTTON CLICK EVENT HANDLERS --------------------//
-//	
-	$(document).on('click','#new_note',function(){			//new_note
+
+//----------------------------------------------------------//
+//---------------------- EVENT HANDLERS --------------------//
+//----------------------------------------------------------//
+	
+	
+	//-------------- expand_note --------------//
+	$(document).on('click','#new_note',function(){			
 		$(this).addClass('note_expanded');
 		$('#new_note').css({'text-align':'left'});
 	});
-
 	//-------------- expand_note --------------//
 	$(document).on('click','#expand_note',function(){	
 		$('#note_outer').toggleClass('note_expanded');
 		$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-6 );
-		
+		$('#checkbox_ribbon').height( $('#note_outer').height() );
 		//$('#note_outer').css({'height':'500px'});
 		/*
 		$('#new_note').toggleClass('note_expanded');
@@ -72,14 +75,10 @@ function show_cal(id){
 		
 	});
 	
-	/*
-	$(document).on('resize','#note_outer',function(){
-		con('resized');
-	});
-	*/
 
-	//-------------- cal_box_numbered --------------//	
-	$(document).on('click','.cal_box_numbered',function(){	//calendar day clicked
+	//-------------- select date --------------//	
+	//adjust the date input field based on new user-selected date
+	$(document).on('click','.cal_box_numbered',function(){	
 		d = $(this).children()[0].innerHTML.split(',')
 	
 		month = d[0];
@@ -99,29 +98,104 @@ function show_cal(id){
 
 	//-------------- textarea keylogger and keydown functions --------------//
 	
-	//$(document).ready(function(){
+
+function insert_text(text, el){
+	var cursorPos = el.prop('selectionStart');
+	var line = el.val();
+	line = line.substring(0, cursorPos) +text+ line.substring(cursorPos, line.length);
 	
+	el.val( line );
+	el.selectRange(cursorPos+text.length);
+}
+
+$(document).on('keydown','.note_line',function(e){
+	//con(e.which);
 	
-	$(document).on('keydown','.note_line',function(e){
-		switch (e.which){
-			case 9:							//simulate tab-spacer behavior
-				e.preventDefault();
-				$(this).val( $(this).val()+'    ' );
-				break;
+	function sections_check(){
+		var lines = $('.note_line').val().split('\n') ;
+		var is_new_section = [];
+		for (i=0 ; i < lines.length ; i++){
+			is_new_section.push( lines[i].length != 0 && [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1  );
+			//is_new_section.push( [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1 );
 			
+			//lines[i][0] != ' ' and lines[i][0] != );
+			//con(  );
 		}
-	});
+		var sections = [];
+	
+		con( is_new_section );
+		
+		
+		
+		
+		
+		
+		
+		
+		//-------------------------------------------------section breakdown here
+		for (i=0 ; i < lines.length; i ++){
+			if ( is_new_section[i] ){
+				
+			}
+		}
+	}
+	
+	switch (e.which){
+		case 9:	
+		//	tab pressed... (insert 4 spaces)
+			e.preventDefault();
+			insert_text('    ', $(this));
+			break;	
+		case 13:
+			sections_check();
+			break;			
+	}
+	
+	
+	//con(num_lines);
+});
+	
+	
 	
 	$(document).keydown(function(e){
-		con(e.which);
-		
-		
 		switch (e.which){
-			case 27:
+			case 27:	// ESC
 				$('#dogcal_popup').hide();
+				cal_showing = false;
 		}
-		
+		if ( $('.note_line').height() > $('#note_outer').height() ){
+			$('.note_line').height( $('#note_outer').height() );
+		}
 	});
+
+
+//from mpen https://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
+//selectRange can set cursor position in text element by supplying a single number (vs. a range)
+$.fn.selectRange = function(start, end) {
+    if(end === undefined) {
+        end = start;
+    }
+    return this.each(function() {
+        if('selectionStart' in this) {
+            this.selectionStart = start;
+            this.selectionEnd = end;
+        } else if(this.setSelectionRange) {
+            this.setSelectionRange(start, end);
+        } else if(this.createTextRange) {
+            var range = this.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', end);
+            range.moveStart('character', start);
+            range.select();
+        }
+    });
+};
+
+//With this, you can do
+
+//$('#elem').selectRange(3,5); // select a range of text
+//$('#elem').selectRange(3); // set cursor position
+
 	
 	
 	
@@ -188,6 +262,7 @@ function show_cal(id){
 $(document).ready(function(){
 	//$('.note_line').width( $('#note_outer').width()-4 );				//------------------------------------------
 	$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-6 );
+	
 	autosize($('.note_line'));
 	
 	$('#checkbox_ribbon').height( $('#note_outer').height() );
@@ -266,13 +341,30 @@ function note_expander_position(){
 	//$('#note_expander').css({'margin-top':offset+'px'});
 }
 
+
+//set cursor to last position of .note_line when the larger note_outer div is clicked
+$(document).on('click','#note_outer',function(){
+	$('.note_line').focus();
+	$('.note_line').selectRange( $('.note_line').val().length );
+});
+
+
+//prevent propagation firing of elements over #note_outer (to select for click on #note_outer only)
+$(document).on('click','.note_line, #checkbox_ribbon',function(e){
+	e.stopPropagation();
+});
+
 $(document).ready(function(){
-	//con( $('#note_expander').css('border-top') );
-	//$('#note_expander').css({'margin-top':})
+	
+	
+	
+	
+	
 });
 
 $(document).keydown(function(e){
-	
+	//var note = $('.note_line').val()
+	//con( e.which );
 });
 
 

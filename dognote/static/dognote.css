@@ -2,9 +2,8 @@
 	display:none;
 }
 .note_expanded{
-	width:500px;
-	height:600px;
-	
+	width:500px		!important;
+	height:600px	!important;
 }
 #dogcal_popup{
 	display:none;
@@ -13,12 +12,14 @@
 	display:inline-block;
 	
 }
-textarea{
+.add_form_ta{
 	height:16px;
 	text-align:center;
 	padding:3px;
 	resize:none;
 	width:150px;
+	font-size:14px;
+	vertical-align:top;
 }	
 
 *{
@@ -34,8 +35,57 @@ textarea{
 	resize:both;
 }
 #checkbox_ribbon{
-	background-color:yellow;
-	width:25px;
+	width:18px;
+	overflow:hidden;
 	display:inline-block;
-	height:30px;
+	text-align:center;
+	margin:0px;
+}
+.checkbox{
+	height:18px;
+	width:18px;
+	background-color:yellow;
+	margin:0px;
+	display:block;
+	
+}
+
+
+
+#note_outer{
+	height:140px;
+	width:200px;
+	display:inline-block;
+	border-width:1px;
+	margin:0px;
+	vertical-align:top;
+}
+.note_line{
+	resize:none;
+	display:block;
+	margin:0px;
+	height:14px;
+	border-width:1px;
+	padding:0px;
+	width:50px;
+	margin-left:-4px;
+}
+#note_lines_box{
+	display:inline-block;
+	margin:0px;
+}
+#note_expander{
+	
+	
+	border-right:	11px solid rgb(200,200,200);
+	border-top:		11px solid transparent;
+	border-bottom:	5px solid rgb(200,200,200);
+	border-left: 	5px solid transparent;
+	display:		inline-block;
+	cursor:			pointer;
+	position:		absolute;
+	margin-left:	-16px;
+	/*
+	vertical-align:	bottom;
+	*/
 }

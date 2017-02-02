@@ -7,6 +7,7 @@
 
 	<script type='text/javascript' src='http://localhost:8000/static/jquery2.2.3.min.js'></script>
 	<script type='text/javascript' src='http://localhost:8000/static/dognote.js'></script>
+	<script type='text/javascript' src='http://localhost:8000/static/autosize.js'></script>
 
 	<title>dognote</title>
 
@@ -21,13 +22,51 @@
 		
 			<button id='add_person' class='add_form'>Add</button>
 			
-			<textarea id='new_name' class='add_form' autocomplete='off' onclick=this.select()>Name</textarea>
-			<textarea id='set_meeting' class='add_form' autocomplete='off' onclick=show_cal(this.id)>Set meeting</textarea>
+			<textarea id='new_name' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
+			<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)>Set meeting</textarea>
 			
 			<button id='expand_note'>+/-</button>
-			<span id='checkbox_ribbon'></span>
+			
+			
+			<div id='note_outer' class='border'>
+				
+				<!--
+				<span id='note_expander'></span>
+				-->
+				<div id='checkbox_ribbon' class='border'>
+					<input type='checkbox' class='checkbox' autocomplete='off'/>
+				</div>
+				
+	
+				<textarea id='note_line_orig' class='note_line' autocomplete='off' style='display:none'>aa</textarea>
+				
+				<div id='note_lines_box' class='border'>
+					<textarea id='n1' class='note_line' autocomplete='off'></textarea>
+					<textarea id='n2' class='note_line' autocomplete='off'></textarea>
+					<textarea id='n3' class='note_line' autocomplete='off'></textarea>
+				</div>
+				
+			</div>
+			
+			
+			<!--
+			<span id='checkbox_ribbon' class='border'>
+				<input type='checkbox' class='checkbox' autocomplete='off'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				<input type='checkbox' class='checkbox'/>
+				
+			</span>
 			<textarea id='new_note' class='add_form note current_note' autocomplete='off'>Note</textarea>
 			
+			
+			-->
 		</div>
 	</div>
 	

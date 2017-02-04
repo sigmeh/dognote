@@ -57,8 +57,10 @@ function show_cal(id){
 	//-------------- expand_note --------------//
 	$(document).on('click','#expand_note',function(){	
 		$('#note_outer').toggleClass('note_expanded');
-		$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-6 );
+		$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
 		$('#checkbox_ribbon').height( $('#note_outer').height() );
+		$('.note_line').height( $('#note_outer') );
+		$('.dummy_text').width( $('.note_line').width() );
 		//$('#note_outer').css({'height':'500px'});
 		/*
 		$('#new_note').toggleClass('note_expanded');
@@ -99,6 +101,7 @@ function show_cal(id){
 	//-------------- textarea keylogger and keydown functions --------------//
 	
 
+//inserts '    ' when tab is pressed and places cursor at the end of the insertion
 function insert_text(text, el){
 	var cursorPos = el.prop('selectionStart');
 	var line = el.val();
@@ -108,24 +111,87 @@ function insert_text(text, el){
 	el.selectRange(cursorPos+text.length);
 }
 
+
+
+
+var num_checkboxes = 0;
+//event handler does not register final input character unless assayed after delay (1 ms)
+var note_height = $('.note_line').height();
+var next_checkbox_height = 0;
 $(document).on('keydown','.note_line',function(e){
-	//con(e.which);
+	setTimeout(function(){
+		sections_check(e.which);
+	},1);
+	//con( $('.note_line').height() );
 	
-	function sections_check(){
+	
+	function sections_check(key){
+		var pos = $('.note_line').prop('selectionStart');
+		if ( pos > 1 && key != 8 && key != 9 && $('.note_line').val()[pos-2] != '\n' && note_height == $('.note_line').height() ){
+			con('in');
+			return;
+		}
+		//con('not in');
+		//con( note_height == $('.note_line').height() );
+		
+		note_height = $('.note_line').height();
+		
+	
+		$('#checkbox_ribbon').html('');
+		$('.dummy_text').remove();
 		var lines = $('.note_line').val().split('\n') ;
+		//con(lines.length);
 		var is_new_section = [];
 		for (i=0 ; i < lines.length ; i++){
-			is_new_section.push( lines[i].length != 0 && [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1  );
-			//is_new_section.push( [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1 );
+			//ensure each line has length and does not start with whitespace characters
+			var new_section = lines[i].length != 0 && [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1;
+			is_new_section.push(new_section);
+			//con( $('.note_line').css('line-height') );
 			
-			//lines[i][0] != ' ' and lines[i][0] != );
-			//con(  );
+			var dummy_text = document.createElement('textarea');
+			dummy_text.className = 'dummy_text';
+			dummy_text.autocomplete = 'off';
+			//dummy_text.value = lines[i];
+			
+			//con( dummy_text.style.height + String(i) );
+			//con(dummy_text.value);
+			$('#note_inner').append(dummy_text);
+			
+			
+			
+
+			
+			$('.dummy_text').width( $('.note_line').width() );
+			//con( $('#note_inner').children()[-1] );
+			
+			
+			
+			$('.dummy_text').last().val( lines[i] );
+			con( $('.dummy_text').last().val() );
+			
+			autosize( $('.dummy_text') );
+			
+			dtl = $('.dummy_text').length;
+			var topPos = $('.dummy_text')[dtl-1].getBoundingClientRect().top  ;
+			var botPos = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom ;
+			
+			
+			next_checkbox_height = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom;
+			//con('topPos:'+String(topPos));
+			
+			if (new_section){
+				var new_checkbox = document.createElement('input');
+				new_checkbox.type = 'checkbox';
+				new_checkbox.id = 'line'+String(i);
+				new_checkbox.className = 'checkbox';
+				
+				//new_checkbox.style.marginTop = next_checkbox_height - $('#checkbox_ribbon')[0].getBoundingClientRect().top +'px';
+				
+				new_checkbox.style.marginTop = topPos - $('#checkbox_ribbon')[0].getBoundingClientRect().top +'px';
+				
+				$('#checkbox_ribbon').append(new_checkbox);
+			}
 		}
-		var sections = [];
-	
-		con( is_new_section );
-		
-		
 		
 		
 		
@@ -145,10 +211,22 @@ $(document).on('keydown','.note_line',function(e){
 		//	tab pressed... (insert 4 spaces)
 			e.preventDefault();
 			insert_text('    ', $(this));
-			break;	
-		case 13:
 			sections_check();
-			break;			
+			break;	
+		/*
+		case 13:
+		//  enter pressed (calculate number of lines)
+			sections_check();
+			break;	
+		case 32:
+		//  space pressed
+			sections_check();
+			break;
+		case 224:
+		// 	command key pressed
+			sections_check();
+			break;	
+		*/	
 	}
 	
 	
@@ -251,17 +329,10 @@ $.fn.selectRange = function(start, end) {
 
 
 
-
-//---------------------- auto-run load_cal_html --------------------//	
-(function(){	
-	load_cal_html();
-
-})();
-
-
 $(document).ready(function(){
+	
 	//$('.note_line').width( $('#note_outer').width()-4 );				//------------------------------------------
-	$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-6 );
+	$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
 	
 	autosize($('.note_line'));
 	
@@ -269,78 +340,8 @@ $(document).ready(function(){
 });
 
 
-//---------------------- match checkbox_ribbon height with note height --------------------//	
-
-/*
-var mouse_down_on_note = false;
-function note_ribbon_height_match(){
-	$('#checkbox_ribbon').height( 
-		$('.note').height()+3+'px'	
-	);
-}
-$(document).ready(function(){	
-	//note_ribbon_height_match();
-	note_expander_position();
-	$('#note_expander').mousedown(function(e){	
-		var noteX = e.pageX;
-		var noteY = e.pageY;
-		mouse_down_on_note = true;
-		
-		$(this).mousemove(function(){
-			if (mouse_down_on_note){
-				var note_outer_width = $('#note_outer').width();
-				var note_outer_height = $('#note_outer').height();
-				$('#note_outer').width(note_outer_width);
-						
-				//note_ribbon_height_match();
-				setTimeout(function(){
-					//note_ribbon_height_match();
-					note_expander_position();
-				},200);
-			}
-		});
-	});
-	$(this).mouseup(function(){
-		mouse_down_on_note = false;
-	});
-});
-*/
-
-/*
-$(document).ready(function(){	
-	//note_ribbon_height_match();
-	note_expander_position();
-	$('.note').mousedown(function(){	
-		mouse_down_on_note = true;
-		$(this).mousemove(function(){
-			if (mouse_down_on_note){		
-				note_ribbon_height_match();
-				setTimeout(function(){
-					//note_ribbon_height_match();
-					note_expander_position();
-				},200);
-			}
-		});
-	});
-	$(this).mouseup(function(){
-		mouse_down_on_note = false;
-	});
-});
-
-
-*/
-
 
 //---------------------- note typing event handler --------------------//
-
-function note_expander_position(){
-	
-	//var offset = $('#note_outer').height() - $('.note_line').height()*$('.note_line').length - $('#note_expander').height();
-	
-	//var offset = $('#note_outer').height() - 16;
-	//$('#note_expander').css({'margin-top':offset+'px'});
-}
-
 
 //set cursor to last position of .note_line when the larger note_outer div is clicked
 $(document).on('click','#note_outer',function(){
@@ -354,23 +355,16 @@ $(document).on('click','.note_line, #checkbox_ribbon',function(e){
 	e.stopPropagation();
 });
 
+//----------------------------------------------------------//
+//-------------------- AUTO-RUN AT STARTUP------------------//	
+//----------------------------------------------------------//
+(function(){	
+	load_cal_html();
+})();
+
 $(document).ready(function(){
-	
-	
-	
-	
-	
+	$('.note_line').focus();
 });
-
-$(document).keydown(function(e){
-	//var note = $('.note_line').val()
-	//con( e.which );
-});
-
-
-
-
-
 
 
 

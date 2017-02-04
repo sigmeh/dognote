@@ -1,0 +1,8 @@
+#!/usr/bin/env python
+def main():
+	with open('dognote.html','r') as f:
+		dognote = f.read()
+	print 'content-type:text/html\n'
+	print dognote
+if __name__ == '__main__':
+	main()

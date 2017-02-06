@@ -13,7 +13,8 @@ $(document).on('click','*',function(e){
 	}
 });
 
-//auto-populate namebox on load (hidden until clicked)
+//auto-populate namebox on load (hidden until clicked) for selecting a previously-saved name
+//also populate #names_list for retrieval of previous notes for previous names
 $(document).ready(function(){
 	$.ajax({
 		method:'post',
@@ -24,16 +25,30 @@ $(document).ready(function(){
 			}) 
 		},	
 		success:function(names){
-			con(names);
 			names = JSON.parse(names);
+			con(names.length);
+			
+			if (names.length == 0){
+				$('#names_list').append(
+					'\
+					<div class="border names_list_name">--no saved data--</div>   \
+					'
+				);		
+			}
+			
 			//populate namebox 
 			for (i=0; i<names.length; i++){
-				var id = names[i];
+				var name = names[i];
 				$('#namebox').append(
-					'<div id="'+id+'" class="namebox_name">	\
+					'<div id="'+name+'" class="namebox_name">	\
 					</div>'
 				);
-				$('#'+id).html(id);
+				$('#'+name).html(name);
+				$('#names_list').append(
+					'\
+					<div class="border names_list_name">'+name+'</div>   \
+					'
+				);
 			}		
 		}
 	});
@@ -44,4 +59,5 @@ $(document).on('click','.namebox_name',function(){
 	if ( id != 'no_saved_names'){
 		$('#name_ta').val( $(this).attr('id') );	
 	}
+	$('#namebox').hide();
 });

@@ -19,6 +19,7 @@ function generate_cal(cal){
 	//Add header (e.g. January 2017), and populate calendar boxes with week days and date numbers	
 	
 	$('#cal_header').html(cal[0]);
+	$('.cal_class').removeClass('off_month');
 	
 	for (i=0; i<42; i++){							//populate calendar
 		if (i < 7){
@@ -27,9 +28,19 @@ function generate_cal(cal){
 		else{
 			$('#cal_box'+i).html(cal[2][i-7][1]);	//process all numbers
 				
+			/*
+			con(cal[2][i-7][0]);
+			var data = $('#cal_header').html().split(' ');	
+			var month = months[data[0]];
+			*/
+			if ( months[cal[0].split(' ')[0]] != cal[2][i-7][0] ){
+				$('#cal_box'+i).addClass('off_month');
+			}
+			
 			$('#cal_box'+i).append(					
 				'<div class="cal_box_date_data">'+String(cal[2][i-7])+'</div>'
 			);	//store [month,day,year] in cal_box_date_data (child of cal_box) for each calendar day
+			
 		}	
 	}	
 }
@@ -63,9 +74,7 @@ $('.cal_arrow').click(function(){
 				month += 1;
 			}
 			break;
-		default:
-			
-			
+		default:		
 	}
 	
 	$.ajax({					//get new calendar values on cal_arrow click
@@ -90,12 +99,13 @@ $('.cal_arrow').click(function(){
 function build_calendar(){
 	for (i=0; i<42; i++){
 		var id = 'cal_box'+i;
-		$('#cal_inner').append('<div id='+id+' class="cal_box border"></div>');
+		$('#cal_inner').append('<div id='+id+' class="cal_class cal_box border"></div>');
 		if ((i+1) % 7 == 0 && i != 0){
 			$('#cal_inner').append('<br>');
 		}
 		if (i>6){
 			$('#'+id).addClass('cal_box_numbered');
+			//to distinguish numbers from days (days are the first row)
 		}
 	}
 }

@@ -8,6 +8,10 @@
 	<script type='text/javascript' src='http://localhost:8000/static/jquery2.2.3.min.js'></script>
 	<script type='text/javascript' src='http://localhost:8000/static/dognote.js'></script>
 	<script type='text/javascript' src='http://localhost:8000/static/autosize.js'></script>
+	<script type='text/javascript' src='http://localhost:8000/static/namebox.js'></script>
+	<script type='text/javascript' src='http://localhost:8000/static/save_data.js'></script>
+	<script type='text/javascript' src='http://localhost:8000/static/load_names.js'></script>
+	<script type='text/javascript' src='http://localhost:8000/static/get_data_for_name.js'></script>
 
 	<title>dognote</title>
 
@@ -21,33 +25,46 @@
 		<div id='add_form'>
 		
 			<button id='add_person' class='add_form'>Add</button>
+		
+			<div class='inline-block'>
+			<textarea id='name_ta' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
+				<div id='namebox' class='border'>
+				</div>
+			</div>
 			
-			<textarea id='new_name' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
 			<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)>Set meeting</textarea>
 			
-			<button id='expand_note'>+/-</button>
+			<div class='inline-block'>
+				<button id='expand_note'>&nbsp;+/-&nbsp;&nbsp;</button>
+				<br>
+				<button id='save_button'>Save</button>
+				<br>
+				<button id='clear_data'>Clear</button>
+			</div>
 			
-			
-			<div id='note_outer' class='border'>
-				
+			<div id='note_outer' class='border'>		
 				<!--
 				<span id='note_expander'></span>
 				-->
 				<div id='checkbox_ribbon' class='border'>
 					<input type='checkbox' class='checkbox' autocomplete='off'/>
 				</div>
-				
-	
-				
+						
 				<div id='note_inner'>
-					<textarea id='n1' class='note_line' autocomplete='off'></textarea>
+					<textarea id='note_lines' autocomplete='off'></textarea>
 				</div>
-				
+		
 			</div>	
-			<div id='note2'>
 			
-			</div>			
+			<div id='scratchpad_outer' class='inline-block'>
+				<textarea id='scratchpad'></textarea>
+			</div>		
 		</div>
+		
+		<div id='names_list'>
+			Choose notes from:
+		</div>
+		
 	</div>
 	</div>
 	

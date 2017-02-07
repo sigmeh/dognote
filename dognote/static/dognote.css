@@ -1,20 +1,8 @@
-body{
-	background-color:rgb(130,198,254);
-}
-.cal_box_date_data{
-	display:none;
-}
-.note_expanded{
-	width:500px		!important;
-	height:600px	!important;
-}
-#dogcal_popup{
-	display:none;
-	z-index:100;
+*{
+	vertical-align:top;	
 }
 .add_form{
-	display:inline-block;
-	
+	display:inline-block;	
 }
 .add_form_ta{
 	height:16px;
@@ -24,57 +12,90 @@ body{
 	width:150px;
 	font-size:14px;
 	vertical-align:top;
-}	
-
-*{
-	vertical-align:top;
-	
+}
+body{
+	/*
+	background-color:rgb(130,198,254);
+	*/
 }
 .border{
 	border-style:solid;
 	border-color:black;
 	border-width:1px;
 }
-#new_note{
-	resize:both;
+button{
+	display:inline-block;
+}
+.cal_box_date_data{
+	display:none;
+}
+.checkbox{
+	height:14px;
+	background-color:yellow;
+	margin:0px;	
+	display:block;
+	position:absolute;
+	margin-left:1px;
 }
 #checkbox_ribbon{
 	width:18px;
 	overflow:hidden;
 	display:inline-block;
-
 	text-align:center;
 	margin:0px;
 	background-color:rgb(240,244,250);
 }
-.checkbox{
+#dogcal_popup{
+	display:none;
+	z-index:100;
+}
+.dummy_text{
+	display:none;
+	resize:none;
 	height:14px;
-	background-color:yellow;
 	margin:0px;
-	margin-right:2px;
-	display:block;
-	position:absolute;
+	border-width:0px;
+	padding:0px;
+	width:50px;
+	display:block;	
 }
-
-#note_outer{
-	background-color:rgb(172,213,231);
-	height:140px;
-	
-	width:200px;
+.inline-block{
 	display:inline-block;
-	border-width:1px;
-	margin:0px;
-	vertical-align:top;
-	
 }
-#note_inner{
-	
+.names_list_name{
+	height:18px;
+	width:200px;
+	padding-left:5px;
+	margin-left:100px;
+}
+.names_list_name:hover{
+	cursor:pointer;
+	background-color:rgb(216,257,189);
+}
+#new_note{
+	resize:both;
+}
+.note_expanded{
+	width:500px		!important;
+	height:600px	!important;
+}
+#note_expander{
+	border-right:	11px solid rgb(200,200,200);
+	border-top:		11px solid transparent;
+	border-bottom:	5px solid rgb(200,200,200);
+	border-left: 	5px solid transparent;
+	display:		inline-block;
+	cursor:			pointer;
+	position:		absolute;
+	margin-left:	-16px;
+}
+#note_inner{	
 	margin:0px;
 	padding:0px;
 	display:inline-block;
+	overflow:hidden;
 }
-.note_line{
-	
+#note_lines{	
 	resize:none;
 	height:14px;
 	display:block;
@@ -89,31 +110,29 @@ body{
 	display:inline-block;
 	margin:0px;
 }
-.dummy_text{
-	
-	resize:none;
-	height:14px;
-
+#note_outer{
+	height:140px;
+	width:200px;
+	display:inline-block;
+	border-width:1px;
 	margin:0px;
-	border-width:0px;
-	padding:0px;
-	width:50px;
-
-	display:block;
+	vertical-align:top;
+	overflow:hidden;	
+}
+#scratchpad{
+	width:200px;
+	height:140px;
+	display:inline-block;
+	background-image:url(/ref/scratchpad_background.png);
+	background-repeat:no-repeat;
+	background-position:center;
+	vertical-align:top;
+	margin:0px;
+	
 	
 }
-#note_expander{
-	
-	
-	border-right:	11px solid rgb(200,200,200);
-	border-top:		11px solid transparent;
-	border-bottom:	5px solid rgb(200,200,200);
-	border-left: 	5px solid transparent;
-	display:		inline-block;
-	cursor:			pointer;
-	position:		absolute;
-	margin-left:	-16px;
-	/*
-	vertical-align:	bottom;
-	*/
+#scratchpad_outer{
+	margin:0px;
+	padding:0px;
+	border:0px;
 }

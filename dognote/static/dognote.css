@@ -5,13 +5,15 @@
 	display:inline-block;	
 }
 .add_form_ta{
-	height:16px;
 	text-align:center;
-	padding:3px;
+	height:22px;
+	
+	padding:auto;
 	resize:none;
 	width:150px;
-	font-size:14px;
-	vertical-align:top;
+	font-size:17px;
+	padding-top:5px;
+	
 }
 body{
 	/*
@@ -25,9 +27,14 @@ body{
 }
 button{
 	display:inline-block;
+	font-size:14px;
+	width:60px;
 }
 .cal_box_date_data{
 	display:none;
+}
+.center{
+	text-align:center;
 }
 .checkbox{
 	height:14px;
@@ -45,6 +52,22 @@ button{
 	margin:0px;
 	background-color:rgb(240,244,250);
 }
+#date_list_box{
+
+}
+.date_list_date{
+	width:160px;
+	
+	margin:0px;
+	height:18px;
+}
+.date_list_date:hover{
+	cursor:pointer;
+	background-color:rgba(124,235,110,.2);
+}
+.date_list_date_inner{
+	width:130px;
+}
 #dogcal_popup{
 	display:none;
 	z-index:100;
@@ -59,11 +82,17 @@ button{
 	width:50px;
 	display:block;	
 }
+.important{
+	height:14px;
+	width:14px;
+	background-color:yellow;
+	display:inline-block;	
+}
 .inline-block{
 	display:inline-block;
 }
 .names_list_name{
-	height:18px;
+	height:20px;
 	width:200px;
 	padding-left:5px;
 	margin-left:100px;
@@ -74,6 +103,9 @@ button{
 }
 #new_note{
 	resize:both;
+}
+#note_added_msg{
+	display:none;
 }
 .note_expanded{
 	width:500px		!important;
@@ -98,6 +130,7 @@ button{
 #note_lines{	
 	resize:none;
 	height:14px;
+	
 	display:block;
 	margin:0px;
 	border-width:0px;
@@ -135,4 +168,8 @@ button{
 	margin:0px;
 	padding:0px;
 	border:0px;
+}
+textarea{
+	
+	border-width:1px;
 }

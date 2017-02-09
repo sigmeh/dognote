@@ -28,19 +28,26 @@ function load_cal_html(){
 }
 
 //---------------------- SHOW CALENDAR --------------------//	
+//
+// a delay in show_cal allows for key log before cal_showing == true
+// in order to hide dogcal_popup when anything else is clicked
 function show_cal(id){
-	
-	if (!cal_showing){
-		$('#'+id).select();
+
+	//Add functionality to show selected date(month) if date was previously selected when a hidden calendar is shown
+
+	setTimeout(function(){
+		if (!cal_showing){
+			$('#'+id).select();
 		
-		$('#calendar').css({
-			'margin-left':mouseX+'px',
-			'margin-top':mouseY+'px'
-		});
+			$('#calendar').css({
+				'margin-left':mouseX+'px',
+				'margin-top':mouseY+'px'
+			});
 		
-		$('#dogcal_popup').show();
-		cal_showing = true;			
-	}
+			$('#dogcal_popup').show();
+			cal_showing = true;			
+		}
+	},1);
 }
 
 
@@ -48,6 +55,15 @@ function show_cal(id){
 //---------------------- EVENT HANDLERS --------------------//
 //----------------------------------------------------------//
 	
+	//-------------- clear_data --------------//
+	$(document).on('click','#clear_data',function(){
+		$('#name_ta').val('Name');
+		$('#set_meeting').val('Set meeting');
+		$('#note_lines').val('');
+		$('#checkbox_ribbon').html('');
+		$('.dummy_text').remove();
+	
+	});
 	
 	//-------------- expand_note --------------//
 	$(document).on('click','#new_note',function(){			
@@ -57,10 +73,29 @@ function show_cal(id){
 	//-------------- expand_note --------------//
 	$(document).on('click','#expand_note',function(){	
 		$('#note_outer').toggleClass('note_expanded');
-		$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
+		$('#note_lines').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
 		$('#checkbox_ribbon').height( $('#note_outer').height() );
-		$('.note_line').height( $('#note_outer') );
-		$('.dummy_text').width( $('.note_line').width() );
+		$('#note_lines').height( $('#note_outer') );
+		$('.dummy_text').width( $('#note_lines').width() );
+		//$('.dummy_text').show();
+		
+		for (i=0; i< $('.dummy_text').length; i++){
+			//eliminate overflow .dummy_text and .checkbox
+			
+			//con($('.dummy_text')[i].getBoundingClientRect().top+' dummy');
+			//con($('#note_outer')[0].getBoundingClientRect().bottom+' note_outer');
+			
+			if ( $('.dummy_text')[i].getBoundingClientRect().top > $('#note_outer')[0].getBoundingClientRect().bottom ){
+				
+				//$('.dummy_text').remove();
+				//$('.dummy_text')[i].style.display = 'none';
+				con('none');
+				//con($('.dummy_text')[i].style.display);
+			}
+			//$('.dummy_text')[dtl-1].getBoundingClientRect().bottom;
+		}
+		
+		sections_check('pass');
 		//$('#note_outer').css({'height':'500px'});
 		/*
 		$('#new_note').toggleClass('note_expanded');
@@ -76,7 +111,6 @@ function show_cal(id){
 		*/
 		
 	});
-	
 
 	//-------------- select date --------------//	
 	//adjust the date input field based on new user-selected date
@@ -114,98 +148,61 @@ function insert_text(text, el){
 
 
 
-var num_checkboxes = 0;
-//event handler does not register final input character unless assayed after delay (1 ms)
-var note_height = $('.note_line').height();
-var next_checkbox_height = 0;
-$(document).on('keydown','.note_line',function(e){
-	setTimeout(function(){
-		sections_check(e.which);
-	},1);
-	//con( $('.note_line').height() );
-	
-	
-	function sections_check(key){
-		var pos = $('.note_line').prop('selectionStart');
-		if ( pos > 1 && key != 8 && key != 9 && $('.note_line').val()[pos-2] != '\n' && note_height == $('.note_line').height() ){
-			con('in');
-			return;
-		}
-		//con('not in');
-		//con( note_height == $('.note_line').height() );
-		
-		note_height = $('.note_line').height();
-		
-	
-		$('#checkbox_ribbon').html('');
-		$('.dummy_text').remove();
-		var lines = $('.note_line').val().split('\n') ;
-		//con(lines.length);
-		var is_new_section = [];
-		for (i=0 ; i < lines.length ; i++){
-			//ensure each line has length and does not start with whitespace characters
-			var new_section = lines[i].length != 0 && [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1;
-			is_new_section.push(new_section);
-			//con( $('.note_line').css('line-height') );
-			
-			var dummy_text = document.createElement('textarea');
-			dummy_text.className = 'dummy_text';
-			dummy_text.autocomplete = 'off';
-			//dummy_text.value = lines[i];
-			
-			//con( dummy_text.style.height + String(i) );
-			//con(dummy_text.value);
-			$('#note_inner').append(dummy_text);
-			
-			
-			
+function sections_check(key){
+	var pos = $('#note_lines').prop('selectionStart');
+	if ( pos > 1 && key != 8 && key != 9 && $('#note_lines').val()[pos-2] != '\n' && note_height == $('#note_lines').height() && key != 'pass'){ 
+		con('in');
+		return;
+	}
+	note_height = $('#note_lines').height();
+	$('#checkbox_ribbon').html('');
+	$('.dummy_text').remove();
+	var lines = $('#note_lines').val().split('\n') ;
 
-			
-			$('.dummy_text').width( $('.note_line').width() );
-			//con( $('#note_inner').children()[-1] );
-			
-			
-			
-			$('.dummy_text').last().val( lines[i] );
-			con( $('.dummy_text').last().val() );
-			
-			autosize( $('.dummy_text') );
-			
-			dtl = $('.dummy_text').length;
-			var topPos = $('.dummy_text')[dtl-1].getBoundingClientRect().top  ;
-			var botPos = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom ;
-			
-			
-			next_checkbox_height = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom;
-			//con('topPos:'+String(topPos));
-			
-			if (new_section){
-				var new_checkbox = document.createElement('input');
-				new_checkbox.type = 'checkbox';
-				new_checkbox.id = 'line'+String(i);
-				new_checkbox.className = 'checkbox';
-				
-				//new_checkbox.style.marginTop = next_checkbox_height - $('#checkbox_ribbon')[0].getBoundingClientRect().top +'px';
-				
-				new_checkbox.style.marginTop = topPos - $('#checkbox_ribbon')[0].getBoundingClientRect().top +'px';
-				
-				$('#checkbox_ribbon').append(new_checkbox);
-			}
-		}
+	var is_new_section = [];
+	for (i=0 ; i < lines.length ; i++){
+		//ensure each line has length and does not start with whitespace characters
+		var new_section = lines[i].length != 0 && [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1;
+		is_new_section.push(new_section);
+		var dummy_text = document.createElement('textarea');
+		dummy_text.className = 'dummy_text';
+		dummy_text.autocomplete = 'off';
+
+		$('#note_inner').append(dummy_text);
+		$('.dummy_text').width( $('#note_lines').width() );
+		$('.dummy_text').last().val( lines[i] );
+		autosize( $('.dummy_text') );
 		
+		dtl = $('.dummy_text').length;
+		var topPos = $('.dummy_text')[dtl-1].getBoundingClientRect().top  ;
+		var botPos = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom ;
 		
+		next_checkbox_height = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom;
 		
-		
-		
-		
-		//-------------------------------------------------section breakdown here
-		for (i=0 ; i < lines.length; i ++){
-			if ( is_new_section[i] ){
-				
-			}
+		if (new_section){
+			var new_checkbox = document.createElement('input');
+			new_checkbox.type = 'checkbox';
+			new_checkbox.id = 'line'+String(i);
+			new_checkbox.className = 'checkbox';
+			
+			new_checkbox.style.marginTop = topPos - $('#checkbox_ribbon')[0].getBoundingClientRect().top +'px';
+			
+			$('#checkbox_ribbon').append(new_checkbox);
 		}
 	}
+}
+
+
+var num_checkboxes = 0;
+var note_height = $('#note_lines').height();
+var next_checkbox_height = 0;
+$(document).on('keydown','#note_lines',function(e){
 	
+	setTimeout(function(){
+		//event handler does not register final input character unless assayed after delay (1 ms)
+		sections_check(e.which);
+	},1);
+
 	switch (e.which){
 		case 9:	
 		//	tab pressed... (insert 4 spaces)
@@ -228,27 +225,25 @@ $(document).on('keydown','.note_line',function(e){
 			break;	
 		*/	
 	}
-	
-	
-	//con(num_lines);
 });
 	
 	
-	
-	$(document).keydown(function(e){
-		switch (e.which){
-			case 27:	// ESC
-				$('#dogcal_popup').hide();
-				cal_showing = false;
-		}
-		if ( $('.note_line').height() > $('#note_outer').height() ){
-			$('.note_line').height( $('#note_outer').height() );
-		}
-	});
+//handle escape keypress (hide dogcal if open
+$(document).keydown(function(e){
+	con(e);
+	switch (e.which){
+		case 27:	// ESC
+			$('#dogcal_popup').hide();
+			cal_showing = false;
+	}
+	if ( $('#note_lines').height() > $('#note_outer').height() ){
+		$('#note_lines').height( $('#note_outer').height() );
+	}
+});
 
 
-//from mpen https://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
 //selectRange can set cursor position in text element by supplying a single number (vs. a range)
+//	from mpen https://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
 $.fn.selectRange = function(start, end) {
     if(end === undefined) {
         end = start;
@@ -269,60 +264,6 @@ $.fn.selectRange = function(start, end) {
     });
 };
 
-//With this, you can do
-
-//$('#elem').selectRange(3,5); // select a range of text
-//$('#elem').selectRange(3); // set cursor position
-
-	
-	
-	
-	/*
-	$(document).keydown(function(e){
-		
-		if ($('.note_line').is(':focus')){
-			con($(this).attr('id'));
-			if (e.which == 13){
-				e.preventDefault();
-				h = $(this).height();
-				//con( $(this) );
-				$(this).css({'height': h + $('#note_line_orig').css('height') });
-				//e.preventDefault();
-				
-			}
-			
-			if (e.which == 9){
-				//con('here');
-				e.preventDefault();
-				var note_val = $(this).val();
-				con(note_val);
-				$(this).val(note_val+'    ');
-				
-			}
-			con(e.which);
-		}
-		
-		if (e.which == 27 && cal_showing){	//if esc key pressed when cal_showing
-			$('#dogcal_popup').hide();		//then hide cal
-			cal_showing = false;
-		}
-		
-		
-		if (e.which == 9 && $('.note_line').is(':focus')){			
-			//if tab key pressed when textarea ('.note') has focus:
-			//insert four spaces (prevent default)
-			e.preventDefault();
-			
-			
-			var note_val = $(this).val();
-			con(note_val);
-			$(this).val(note_val+'    ');
-		
-		}
-		
-	});
-	*/
-	//});
 //		
 //---------------------- BUTTON CLICK EVENT HANDLERS  --------------------//
 //	
@@ -331,10 +272,9 @@ $.fn.selectRange = function(start, end) {
 
 $(document).ready(function(){
 	
-	//$('.note_line').width( $('#note_outer').width()-4 );				//------------------------------------------
-	$('.note_line').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
+	$('#note_lines').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
 	
-	autosize($('.note_line'));
+	autosize($('#note_lines'));		//Cause vertical propagation of note
 	
 	$('#checkbox_ribbon').height( $('#note_outer').height() );
 });
@@ -343,16 +283,24 @@ $(document).ready(function(){
 
 //---------------------- note typing event handler --------------------//
 
-//set cursor to last position of .note_line when the larger note_outer div is clicked
+//set cursor to last position of #note_lines when the larger note_outer div is clicked
 $(document).on('click','#note_outer',function(){
-	$('.note_line').focus();
-	$('.note_line').selectRange( $('.note_line').val().length );
+	$('#note_lines').focus();
+	$('#note_lines').selectRange( $('#note_lines').val().length );
 });
 
 
 //prevent propagation firing of elements over #note_outer (to select for click on #note_outer only)
-$(document).on('click','.note_line, #checkbox_ribbon',function(e){
+$(document).on('click','#note_lines, #checkbox_ribbon',function(e){
 	e.stopPropagation();
+});
+
+//hide dogcal_popup if user clicks elsewhere in window
+$(document).on('click','*',function(e){	
+	if ( ! $(this).hasClass('cal_class')  ){
+		$('#dogcal_popup').hide();	
+		cal_showing = false;
+	}
 });
 
 //----------------------------------------------------------//
@@ -363,23 +311,8 @@ $(document).on('click','.note_line, #checkbox_ribbon',function(e){
 })();
 
 $(document).ready(function(){
-	$('.note_line').focus();
+	$('#note_lines').focus();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

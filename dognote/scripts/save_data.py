@@ -18,7 +18,7 @@ def save_data(data):
 		meeting_date_epoch_time = tc.to_epoch(year,month,day)
 		#a=tc.to_epoch(2012,12,25)
 	else:
-		meeting_date_epoch_time = 0
+		meeting_date_epoch_time = 9999999999
 	
 	note_save_timestamp = str(dt.now())
 	
@@ -32,7 +32,8 @@ def save_data(data):
 			doc['dates'][date] = {
 				'note' : note,
 				'note_save_timestamp' : [note_save_timestamp],
-				'meeting_date_epoch_time' : meeting_date_epoch_time
+				'meeting_date_epoch_time' : meeting_date_epoch_time,
+				'important' : False
 			}
 			
 		
@@ -61,7 +62,8 @@ def save_data(data):
 		with open('ref/people/'+name,'w') as f:
 			doc = json.dumps(data_to_save)
 			f.write(doc)
-	
+		
+		
 def main():
 	pass
 if __name__ == '__main__':

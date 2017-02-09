@@ -7,7 +7,7 @@ def main(name):
 		data = json.loads(f.read())
 	dates = data['dates'].keys()
 
-	meeting_order = sorted( [x for x in data['dates']] , key=lambda k: data['dates'][k]['meeting_date_epoch_time'] )
+	meeting_order = sorted( [x for x in data['dates']] , key=lambda k: data['dates'][k]['meeting_date_epoch_time'] , reverse=True )
 
 	return meeting_order
 	

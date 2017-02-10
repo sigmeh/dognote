@@ -1,3 +1,7 @@
+//Global variable names is referenced elsewhere (get_data_for_name.js)
+//	_names is name.replace(' ','_') for each name in names
+var names = [];
+
 //show namebox when #name_ta is clicked
 $(document).on('click','#name_ta',function(){
 	$('#namebox').show();
@@ -24,10 +28,8 @@ $(document).ready(function(){
 				'instructions': 'get_names'
 			}) 
 		},	
-		success:function(names){
-			names = JSON.parse(names);
-			con(names.length);
-			
+		success:function(result){
+			names = JSON.parse(result);
 			if (names.length == 0){
 				$('#names_list').append(
 					'\
@@ -43,11 +45,15 @@ $(document).ready(function(){
 					'<div id="'+name+'" class="namebox_name">	\
 					</div>'
 				);
-				$('#'+name).html(name);
+				$('#'+name).html(name.replace('_',' '));
 				$('#names_list').append(
+//ADDED ID TO NAMES_LIST_NAME	
 					'\
-					<div class="border names_list_name">'+name+'</div>   \
-					'
+					<div id="'+name+'_names_list">\
+						<div class="border names_list_name inline-block">'
+							+name.replace('_',' ')+
+						'</div>\
+					</div>'
 				);
 			}		
 		}
@@ -57,7 +63,13 @@ $(document).ready(function(){
 $(document).on('click','.namebox_name',function(){
 	var id = $(this).attr('id');
 	if ( id != 'no_saved_names'){
-		$('#name_ta').val( $(this).attr('id') );	
+		$('#name_ta').val( id.replace('_',' ') );	
 	}
 	$('#namebox').hide();
+});
+
+$(document).on('keydown','#name_ta',function(e){
+	switch (e.which){
+		case 13: e.preventDefault();
+	}
 });

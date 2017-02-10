@@ -82,11 +82,14 @@ button{
 	width:50px;
 	display:block;	
 }
-.important{
+.importance_toggle{
 	height:14px;
 	width:14px;
 	background-color:yellow;
 	display:inline-block;	
+}
+.important{
+	background-color:red;
 }
 .inline-block{
 	display:inline-block;

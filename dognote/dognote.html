@@ -3,8 +3,8 @@
 <head>
 	<meta charset='utf-8'>		
 
-	<link rel='stylesheet' type='text/css' href='http://localhost:8000/static/dognote.css'></link>
-
+	<link rel='stylesheet' type='text/css' href='/static/dognote.css'></link>
+<!--
 	<script type='text/javascript' src='http://localhost:8000/static/jquery2.2.3.min.js'></script>
 	<script type='text/javascript' src='http://localhost:8000/static/dognote.js'></script>
 	<script type='text/javascript' src='http://localhost:8000/static/autosize.js'></script>
@@ -12,7 +12,17 @@
 	<script type='text/javascript' src='http://localhost:8000/static/save_data.js'></script>
 	<script type='text/javascript' src='http://localhost:8000/static/load_names.js'></script>
 	<script type='text/javascript' src='http://localhost:8000/static/get_data_for_name.js'></script>
+-->
 
+	<script type='text/javascript' src='/static/jquery2.2.3.min.js'></script>
+	<script type='text/javascript' src='/static/dognote.js'></script>
+	<script type='text/javascript' src='/static/autosize.js'></script>
+	<script type='text/javascript' src='/static/namebox.js'></script>
+	<script type='text/javascript' src='/static/save_data.js'></script>
+	<script type='text/javascript' src='/static/load_names.js'></script>
+	<script type='text/javascript' src='/static/get_data_for_name.js'></script>
+	
+	
 	<title>dognote</title>
 
 </head>
@@ -23,16 +33,19 @@
 	<div id='container'>
 
 		<div id='add_form'>
-		
+			
+			<!--
 			<button id='add_person' class='add_form'>Add</button>
-		
+			-->
+			
 			<div class='inline-block'>
 			<textarea id='name_ta' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
 				<div id='namebox' class='border'>
 				</div>
+				<div id='note_added_msg'>-- Note Added --</div>
 			</div>
 			
-			<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)>Set meeting</textarea>
+			<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)>Date (Open)</textarea>
 			
 			<div class='inline-block'>
 				<button id='expand_note'>&nbsp;+/-&nbsp;&nbsp;</button>
@@ -56,12 +69,16 @@
 		
 			</div>	
 			
+			<!--
 			<div id='scratchpad_outer' class='inline-block'>
 				<textarea id='scratchpad'></textarea>
-			</div>		
+			</div>	
+			-->	
 		</div>
 		
 		<div id='names_list'>
+			<!-- namebox.js loads #names_list content on page load -->
+			<!-- get_data_for_name.js then loads user-selected content -->
 			Choose notes from:
 		</div>
 		

@@ -3,6 +3,8 @@ var date_list_data = null;
 
 $(document).on('click','*',function(e){	
 // close #date_list_box when window is clicked elsewhere
+	
+	
 	e.stopPropagation();
 	if ( ! $(this).hasClass('date_list_date') && ! $(this).hasClass('importance_toggle') && ! $(this).hasClass('names_list_name') ){
 		$('#date_list_box').remove();
@@ -10,6 +12,7 @@ $(document).on('click','*',function(e){
 		dates_showing_id = null;
 		date_list_data = null; 
 	}
+	
 });
 
 

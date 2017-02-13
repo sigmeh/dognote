@@ -20,7 +20,9 @@
 	<script type='text/javascript' src='/static/namebox.js'></script>
 	<script type='text/javascript' src='/static/save_data.js'></script>
 	<script type='text/javascript' src='/static/load_names.js'></script>
+	<script type='text/javascript' src='/static/show_note.js'></script>
 	<script type='text/javascript' src='/static/get_data_for_name.js'></script>
+	
 	
 	
 	<title>dognote</title>
@@ -38,35 +40,58 @@
 			<button id='add_person' class='add_form'>Add</button>
 			-->
 			
-			<div class='inline-block'>
-			<textarea id='name_ta' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
-				<div id='namebox' class='border'>
+			<div id='left_pane' class='inline-block'>
+			
+				<div class='inline-block'>
+				<textarea id='name_ta' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
+					<div id='namebox' class='border'>
+					</div>
+					<div id='note_added_msg'>-- Note Added --</div>
 				</div>
-				<div id='note_added_msg'>-- Note Added --</div>
+			
+				<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)>Date (Open)</textarea>
+			
+				<div class='inline-block'>
+					<button id='expand_note'>&nbsp;+/-&nbsp;&nbsp;</button>
+					<br>
+					<button id='save_button'>Save</button>
+					<br>
+					<button id='clear_data'>Clear</button>
+				</div>
+			
+			
+			
+			
+				<div id='names_list'>
+					<!-- namebox.js loads #names_list content on page load -->
+					<!-- get_data_for_name.js then loads user-selected content -->
+					Choose notes from:
+				</div>
+			
+			
+			
 			</div>
 			
-			<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)>Date (Open)</textarea>
 			
-			<div class='inline-block'>
-				<button id='expand_note'>&nbsp;+/-&nbsp;&nbsp;</button>
-				<br>
-				<button id='save_button'>Save</button>
-				<br>
-				<button id='clear_data'>Clear</button>
-			</div>
 			
-			<div id='note_outer' class='border'>		
-				<!--
-				<span id='note_expander'></span>
-				-->
-				<div id='checkbox_ribbon' class='border'>
-					<input type='checkbox' class='checkbox' autocomplete='off'/>
-				</div>
+			
+			
+			<div id='right_pane' class='inline-block'>
+			
+				<div id='note_outer' class='border'>		
+					<!--
+					<span id='note_expander'></span>
+					-->
+					<div id='checkbox_ribbon' class='border'>
+						<input type='checkbox' class='checkbox' autocomplete='off'/>
+					</div>
 						
-				<div id='note_inner'>
-					<textarea id='note_lines' autocomplete='off'></textarea>
-				</div>
+					<div id='note_inner'>
+						<textarea id='note_lines' autocomplete='off'></textarea>
+					</div>
 		
+				</div>
+			
 			</div>	
 			
 			<!--
@@ -76,11 +101,7 @@
 			-->	
 		</div>
 		
-		<div id='names_list'>
-			<!-- namebox.js loads #names_list content on page load -->
-			<!-- get_data_for_name.js then loads user-selected content -->
-			Choose notes from:
-		</div>
+		
 		
 	</div>
 	</div>

@@ -50,6 +50,13 @@ function show_cal(id){
 	},1);
 }
 
+function clear_data(){
+	$('#name_ta').val('Name');
+	$('#set_meeting').val('Date (Open)');
+	$('#note_lines').val('');
+	$('#checkbox_ribbon').html('');
+	$('.dummy_text').remove();
+}
 
 //----------------------------------------------------------//
 //---------------------- EVENT HANDLERS --------------------//
@@ -57,12 +64,7 @@ function show_cal(id){
 	
 	//-------------- clear_data --------------//
 	$(document).on('click','#clear_data',function(){
-		$('#name_ta').val('Name');
-		$('#set_meeting').val('Set meeting');
-		$('#note_lines').val('');
-		$('#checkbox_ribbon').html('');
-		$('.dummy_text').remove();
-	
+		clear_data();
 	});
 	
 	//-------------- expand_note --------------//
@@ -150,15 +152,24 @@ function insert_text(text, el){
 
 function sections_check(key){
 	var pos = $('#note_lines').prop('selectionStart');
-	if ( pos > 1 && key != 8 && key != 9 && $('#note_lines').val()[pos-2] != '\n' && note_height == $('#note_lines').height() && key != 'pass'){ 
-		con('in');
+	con(pos);
+	if (	pos > 1 && 
+			key != 8 && 
+			key != 'pass' &&
+			$('#note_lines').val()[pos-2] != '\n' && 
+			note_height == $('#note_lines').height() 
+		){ 
 		return;
 	}
 	note_height = $('#note_lines').height();
 	$('#checkbox_ribbon').html('');
 	$('.dummy_text').remove();
 	var lines = $('#note_lines').val().split('\n') ;
-
+	/*
+	for(i=0;i<lines.length;i++){
+		con('line '+String(i)+' : '+lines[i].length);
+	}
+	*/
 	var is_new_section = [];
 	for (i=0 ; i < lines.length ; i++){
 		//ensure each line has length and does not start with whitespace characters
@@ -198,18 +209,17 @@ var note_height = $('#note_lines').height();
 var next_checkbox_height = 0;
 $(document).on('keydown','#note_lines',function(e){
 	
-	setTimeout(function(){
-		//event handler does not register final input character unless assayed after delay (1 ms)
-		sections_check(e.which);
-	},1);
-
 	switch (e.which){
-		case 9:	
-		//	tab pressed... (insert 4 spaces)
+		case 9:		//	(tab) -- insert four spaces
 			e.preventDefault();
 			insert_text('    ', $(this));
-			sections_check();
-			break;	
+			sections_check('pass');
+			break;
+		default:
+			setTimeout(function(){
+				//event handler does not register final input character unless assayed after delay (1 ms)
+				sections_check(e.which);
+			},1);
 		/*
 		case 13:
 		//  enter pressed (calculate number of lines)
@@ -230,15 +240,22 @@ $(document).on('keydown','#note_lines',function(e){
 	
 //handle escape keypress (hide dogcal if open
 $(document).keydown(function(e){
-	con(e);
+
 	switch (e.which){
 		case 27:	// ESC
 			$('#dogcal_popup').hide();
 			cal_showing = false;
 	}
+	
+	
+	
+	
+	
+	/*
 	if ( $('#note_lines').height() > $('#note_outer').height() ){
 		$('#note_lines').height( $('#note_outer').height() );
 	}
+	*/
 });
 
 
@@ -275,6 +292,7 @@ $(document).ready(function(){
 	$('#note_lines').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
 	
 	autosize($('#note_lines'));		//Cause vertical propagation of note
+	//$('#note_lines').height(140);
 	
 	$('#checkbox_ribbon').height( $('#note_outer').height() );
 });
@@ -312,6 +330,8 @@ $(document).on('click','*',function(e){
 
 $(document).ready(function(){
 	$('#note_lines').focus();
+	
+	
 });
 
 

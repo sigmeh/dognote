@@ -13,7 +13,12 @@ def check_localhost():
 		kill_server.main()
 	else:
 		print 'Returned status code:',r.status_code
-		
+		if r.status_code == 200:
+			#status ok; server running from current directory; open page
+			cmd = 'open http://localhost:8000/dognote'.split()
+			sp.Popen(cmd)	#open in default browser
+			
+			return
 	start()
 
 def start():
@@ -36,7 +41,7 @@ def main():
 		check_localhost()
 		
 	except:
-		'''no connection to localhost found; start server'''
+		'''no connection to localhost found; starting server'''
 		start()
 	
 	

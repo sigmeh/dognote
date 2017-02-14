@@ -60,7 +60,7 @@ elif cmd == 'update_importance':
 	)	
 
 elif cmd == 'get_note':
-	show_note.main(name=data['name'],date=data['date'])
+	data = show_note.main(name=data['name'],date=data['date'])
 	print json.dumps(data)
 
 

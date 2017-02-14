@@ -24,7 +24,10 @@ def save_data(data):
 	
 	
 	saved_names = sp.Popen('ls ref/people'.split(),stdout=sp.PIPE).communicate()[0]
+	
 	if name in saved_names:
+		print name, saved_names
+		# Data already saved for this name
 		with open('ref/people/'+name,'r') as f:
 			doc = f.read()
 		doc = json.loads(doc)
@@ -39,22 +42,24 @@ def save_data(data):
 		
 		#	doc['dates'][date] = note
 		else:
-			d = doc['dates'][date] 
-			doc['dates'][date]['note'] = d + '\n\n############### NEW NOTE FOR SAME DATE ################\n\n' + note
-			doc['dates'][date]['note_save_timestamp'].append(timestamp)
+			prev_note = doc['dates'][date]['note']
+			doc['dates'][date]['note'] = prev_note + '\n\n############### NEW NOTE FOR SAME DATE ################\n\n' + note
+			doc['dates'][date]['note_save_timestamp'].append(note_save_timestamp)
 		
 		with open('ref/people/'+name,'w') as f:
 			doc = json.dumps(doc)
 			f.write(doc)
 			
 	else:
+		# Name not found - create new entry
 		data_to_save = {
 			'name': name,
 			'dates': {
 				date : {
 					'note' : note,
 					'note_save_timestamp' : [note_save_timestamp],
-					'meeting_date_epoch_time' : meeting_date_epoch_time
+					'meeting_date_epoch_time' : meeting_date_epoch_time,
+					'important' : False
 				}
 			}
 		}

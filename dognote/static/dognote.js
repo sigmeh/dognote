@@ -6,6 +6,7 @@ function con(msg){console.log(msg)};
 var cal_showing = false;
 var mouseX = 0, mouseY = 0;
 var note_height = $('.current_note').height();
+var white_space_chars = [' ','\n','\t','\r'];
 
 //---------------------- LOAD CALENDAR --------------------//		
 function load_cal_html(){
@@ -151,30 +152,82 @@ function insert_text(text, el){
 
 
 function sections_check(key){
+	
 	var pos = $('#note_lines').prop('selectionStart');
-	con(pos);
+	//con(pos);
 	if (	pos > 1 && 
 			key != 8 && 
 			key != 'pass' &&
 			$('#note_lines').val()[pos-2] != '\n' && 
-			note_height == $('#note_lines').height() 
+			note_height == $('#note_lines').height() ||
+			key == 13
 		){ 
 		return;
 	}
+	//con('checking');
+	
 	note_height = $('#note_lines').height();
-	$('#checkbox_ribbon').html('');
+	
+	//$('#checkbox_ribbon').html('');
+	
+	
+	
+	
 	$('.dummy_text').remove();
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	var lines = $('#note_lines').val().split('\n') ;
+	con(lines.length);
+	var line_list = [];
+	var last_line = '';
+	for (i = 0; i < lines.length; i++){
+		if ( white_space_chars.indexOf( lines[i].substring(0,1) ) != -1 ){
+			line_list.push(last_line);
+			last_line = '';
+			con('up');
+		}else{
+			last_line += lines[i]+'\n';
+			con('down');
+		}
+	}
+	con(line_list);
+	return;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/*
 	for(i=0;i<lines.length;i++){
 		con('line '+String(i)+' : '+lines[i].length);
 	}
 	*/
-	var is_new_section = [];
-	for (i=0 ; i < lines.length ; i++){
+	//var is_new_section = [];
+	$('.nb_on').removeClass('nb_on');
+	
+	for (i = 0; i < lines.length ; i++){
 		//ensure each line has length and does not start with whitespace characters
-		var new_section = lines[i].length != 0 && [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1;
-		is_new_section.push(new_section);
+		//var new_section = lines[i].length != 0 && [' ','\n','\t','\r'].indexOf( lines[i][0] ) == -1;
+		
 		var dummy_text = document.createElement('textarea');
 		dummy_text.className = 'dummy_text';
 		dummy_text.autocomplete = 'off';
@@ -187,22 +240,19 @@ function sections_check(key){
 		dtl = $('.dummy_text').length;
 		var topPos = $('.dummy_text')[dtl-1].getBoundingClientRect().top  ;
 		var botPos = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom ;
+		//con( $( $('.dummy_text')[i]).val() );
 		
-		next_checkbox_height = $('.dummy_text')[dtl-1].getBoundingClientRect().bottom;
 		
-		if (new_section){
-			var new_checkbox = document.createElement('input');
-			new_checkbox.type = 'checkbox';
-			new_checkbox.id = 'line'+String(i);
-			new_checkbox.className = 'checkbox';
-			
-			new_checkbox.style.marginTop = topPos - $('#checkbox_ribbon')[0].getBoundingClientRect().top +'px';
-			
-			$('#checkbox_ribbon').append(new_checkbox);
+		//-------------- Show note bullet for each unique note line
+		if ( $( $('.dummy_text')[i]).val().length > 0 && [' ','\n','\t','\r'].indexOf( $($('.dummy_text')[i]).val().substring(0,1) ) == -1 ){
+			$('.nb_top'+String(topPos)).addClass('nb_on');
 		}
+	
 	}
+	
+	con( $('.dummy_text').length );
+	
 }
-
 
 var num_checkboxes = 0;
 var note_height = $('#note_lines').height();
@@ -236,28 +286,16 @@ $(document).on('keydown','#note_lines',function(e){
 		*/	
 	}
 });
-	
-	
+		
 //handle escape keypress (hide dogcal if open
 $(document).keydown(function(e){
-
+	//con(e.which);
 	switch (e.which){
 		case 27:	// ESC
 			$('#dogcal_popup').hide();
 			cal_showing = false;
 	}
-	
-	
-	
-	
-	
-	/*
-	if ( $('#note_lines').height() > $('#note_outer').height() ){
-		$('#note_lines').height( $('#note_outer').height() );
-	}
-	*/
 });
-
 
 //selectRange can set cursor position in text element by supplying a single number (vs. a range)
 //	from mpen https://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
@@ -285,21 +323,17 @@ $.fn.selectRange = function(start, end) {
 //---------------------- BUTTON CLICK EVENT HANDLERS  --------------------//
 //	
 
-
-
 $(document).ready(function(){
 	
 	$('#note_lines').width( $('#note_outer').width()- $('#checkbox_ribbon').width()-7 );
-	
 	autosize($('#note_lines'));		//Cause vertical propagation of note
-	//$('#note_lines').height(140);
-	
 	$('#checkbox_ribbon').height( $('#note_outer').height() );
+	
 });
 
-
-
-//---------------------- note typing event handler --------------------//
+//----------------------------------------------------------//
+//--------------- NOTE TYPING EVENT HANDLER ----------------//
+//----------------------------------------------------------//
 
 //set cursor to last position of #note_lines when the larger note_outer div is clicked
 $(document).on('click','#note_outer',function(){
@@ -324,6 +358,7 @@ $(document).on('click','*',function(e){
 //----------------------------------------------------------//
 //-------------------- AUTO-RUN AT STARTUP------------------//	
 //----------------------------------------------------------//
+
 (function(){	
 	load_cal_html();
 })();
@@ -331,6 +366,21 @@ $(document).on('click','*',function(e){
 $(document).ready(function(){
 	$('#note_lines').focus();
 	
+	//----------------populate #checkbox_ribbon on load 
+	var finished = false;
+	var counter = 0;
+	while( ! finished ){	
+		$('#checkbox_ribbon').append('<div class="note_bullet" id="line'+String(counter)+'"></div>');
+		$('#line'+String(counter)).addClass( 'nb_top'+$('#line'+String(counter))[0].getBoundingClientRect().top );
+		//con(String(counter));
+		//$('#line'+String(counter)).css({'margin-top': (topPos - $('#checkbox_ribbon')[0].getBoundingClientRect().top) +'px' });
+		if( $('.note_bullet').length > $('#note_outer').height() / 14 ){
+		//if( counter > 25 ){
+			finished = true;
+		}
+		counter++;
+	}
+	$( $('.note_bullet')[0] ).addClass('nb_on');
 	
 });
 

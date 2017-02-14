@@ -45,12 +45,13 @@ button{
 	margin-left:1px;
 }
 #checkbox_ribbon{
-	width:18px;
+	width:17px;
 	overflow:hidden;
 	display:inline-block;
 	text-align:center;
 	margin:0px;
 	background-color:rgb(240,244,250);
+	margin-top:-1px;
 }
 #date_list_box{
 
@@ -106,8 +107,29 @@ button{
 	cursor:pointer;
 	background-color:rgb(216,257,189);
 }
+
+.nb_on{
+	background-color:rgb(222,255,230)	!important;
+	border-color:rgb(77,182,100)		!important;
+}
+
 #new_note{
 	resize:both;
+}
+.note_bullet{
+	/*
+	position:absolute;
+	
+	*/
+	background-color:rgb(250,254,250);
+	border-color:rgb(245,244,255);
+	border-style:solid;
+	border-width:2px;
+	border-radius:10px;
+	height:10px;
+	
+	width:10px;
+	margin-left:1px;
 }
 #note_added_msg{
 	display:none;

@@ -4,24 +4,17 @@
 	<meta charset='utf-8'>		
 
 	<link rel='stylesheet' type='text/css' href='/static/dognote.css'></link>
-<!--
-	<script type='text/javascript' src='http://localhost:8000/static/jquery2.2.3.min.js'></script>
-	<script type='text/javascript' src='http://localhost:8000/static/dognote.js'></script>
-	<script type='text/javascript' src='http://localhost:8000/static/autosize.js'></script>
-	<script type='text/javascript' src='http://localhost:8000/static/namebox.js'></script>
-	<script type='text/javascript' src='http://localhost:8000/static/save_data.js'></script>
-	<script type='text/javascript' src='http://localhost:8000/static/load_names.js'></script>
-	<script type='text/javascript' src='http://localhost:8000/static/get_data_for_name.js'></script>
--->
 
 	<script type='text/javascript' src='/static/jquery2.2.3.min.js'></script>
 	<script type='text/javascript' src='/static/dognote.js'></script>
 	<script type='text/javascript' src='/static/autosize.js'></script>
+	
 	<script type='text/javascript' src='/static/namebox.js'></script>
 	<script type='text/javascript' src='/static/save_data.js'></script>
 	<script type='text/javascript' src='/static/load_names.js'></script>
 	<script type='text/javascript' src='/static/show_note.js'></script>
 	<script type='text/javascript' src='/static/get_data_for_name.js'></script>
+	<script type='text/javascript' src='/static/options_box.js'></script>
 	
 	
 	
@@ -31,7 +24,39 @@
 <body>
 
 	<div id='dogcal_popup'></div>
+	
+	<div id='options_box' class='options_box options_border'>
+		<div id='options_delete' class='options_border options_button'>
+			<img class='options_icon' src='../media/x.png'/>
+		</div>
 
+		<div id='options_check' class='options_border options_button'>
+			<img class='options_icon' src='../media/check.png'/>
+		</div>
+
+		<div id='options_copy' class='options_border options_button'>
+			<img class='options_icon' src='../media/arrow.png'/>
+		</div>
+	</div>
+	
+	<div id='new_meeting_popup'>
+		Set meeting: <br>
+		&nbsp;&nbsp;	1. Select name or enter new name 	<br>
+		&nbsp;&nbsp;	2. Select Date or leave open		<br>
+		<div class='inline-block' style='margin-top:5px'>
+			<textarea id='name_ta' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
+			<br>
+			<div id='namebox' class='border'>
+		
+			</div>
+		</div>
+		
+		<div id='note_added_msg'>-- Data saved --</div>
+
+		<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' style='margin-top:5px' onclick=show_cal(this.id)>Date (Open)</textarea>
+	</div>
+	
+	<!--	begin caontiner -->
 	<div id='container'>
 
 		<div id='add_form'>
@@ -41,15 +66,19 @@
 			-->
 			
 			<div id='left_pane' class='inline-block'>
-			
 				<div class='inline-block'>
-				<textarea id='name_ta' class='add_form add_form_ta' autocomplete='off' onclick=this.select()>Name</textarea>
-					<div id='namebox' class='border'>
+					<div class='inline-block'>
+						<textarea id='name_ta_dummy' class='add_form add_form_ta' autocomplete='off' onclick=this.select()> --- </textarea>
+						<!--
+						<div id='namebox_dummy' class='border'></div>
+						<div id='note_added_msg_dummy'>-- Data saved --</div>-->
 					</div>
-					<div id='note_added_msg'>-- Note Added --</div>
-				</div>
 			
-				<textarea id='set_meeting' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)>Date (Open)</textarea>
+					<textarea id='set_meeting_dummy' class='add_form add_form_ta' autocomplete='off' onclick=show_cal(this.id)> --- </textarea>
+					<br>
+					<button id='new_meeting'>New Meeting</button>
+					<br><br>
+				</div>
 			
 				<div class='inline-block'>
 					<button id='expand_note'>&nbsp;+/-&nbsp;&nbsp;</button>
@@ -66,6 +95,17 @@
 					<!-- namebox.js loads #names_list content on page load -->
 					<!-- get_data_for_name.js then loads user-selected content -->
 					Choose notes from:
+					<!--
+					<div id='names_list'>
+					
+					</div>
+					
+					<div id='add_name'>
+						<div class="border names_list_name inline-block center">
+							... add new... 
+						</div>
+					</div>
+					-->
 				</div>
 			
 			
@@ -83,23 +123,46 @@
 					<span id='note_expander'></span>
 					-->
 					<div id='checkbox_ribbon' class='border'>
-						<input type='checkbox' class='checkbox' autocomplete='off'/>
-					</div>
 						
+						<!--
+						<div class='note_bullet'></div>
+						<input type='checkbox' class='checkbox' autocomplete='off'/>
+						-->
+					
+					</div>
+					
+					
+					<!--
+					<textarea id='note_inner'>	
+					
+					-->
 					<div id='note_inner'>
 						<textarea id='note_lines' autocomplete='off'></textarea>
+						<!--
+						<textarea id='dummy_text' class='dummy_text' autocomplete='off'></textarea>
+						-->
+					<!--
+					</textarea>
+					
+					-->
 					</div>
-		
 				</div>
+				
+				
+				
+				
 			
-			</div>	
+			</div>	<!--right_pane end-->
 			
 			<!--
 			<div id='scratchpad_outer' class='inline-block'>
 				<textarea id='scratchpad'></textarea>
 			</div>	
 			-->	
-		</div>
+		
+		
+			
+		</div> <!--Container end-->
 		
 		
 		
@@ -108,7 +171,8 @@
 	
 	<br><br>	
 	<div id='msgbox'></div>
-	
-	
+	<!--
+	<textarea id='dummy_text' class='dummy_text' autocomplete='off'></textarea>
+	-->
 </body>
 </html>

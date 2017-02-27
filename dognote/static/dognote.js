@@ -71,6 +71,8 @@
 
 	function insert_text(text, el){
 		//inserts '    ' when tab is pressed and places cursor at the end of the insertion
+		
+		
 		var cursorPos = el.prop('selectionStart');
 		var line = el.val();
 		line = line.substring(0, cursorPos) +text+ line.substring(cursorPos, line.length);
@@ -93,9 +95,9 @@
 		$( $('.note_bullet')[0] ).addClass('nb_on');
 	}
 	
-	// 	selectRange can set cursor position in text element by supplying a single number (vs. a range)
-	//	from mpen https://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
 	$.fn.selectRange = function(start, end) {
+		// 	selectRange can set cursor position in text element by supplying a single number (vs. a range)
+		//	from mpen https://stackoverflow.com/questions/499126/jquery-set-cursor-position-in-text-area
 		if ( end === undefined ) {
 			end = start;
 		}
@@ -114,6 +116,7 @@
 			}
 		});
 	};
+	
 
 //----------------------------------------------------------//
 //---------------------- EVENT HANDLERS --------------------//
@@ -162,7 +165,6 @@
 		mouseX = e.pageX;
 		mouseY = e.pageY;
 	});	
-	
 
 //----------------------------------------------------------//
 //--------- SECTIONS CHECK - EVALUATE NOTE LINES -----------//
@@ -224,60 +226,91 @@ function sections_check(key){
 //----------------------------------------------------------//
 //--------------- BUTTON CLICK EVENT HANDLERS ----------------//
 //----------------------------------------------------------//
-
+	
+	
+	
 	//-------------- clear_data --------------//
 	$(document).on('click','#clear_data',function(){
 		clear_data();
 	});
 
-	//set cursor to last position of #note_lines when the larger note_outer div is clicked
+	// set cursor to last position of #note_lines when the larger note_outer div is clicked
 	$(document).on('click','#note_outer',function(){
 		$('#note_lines').focus();
 		$('#note_lines').selectRange( $('#note_lines').val().length );
 	});
 
-	//prevent propagation firing of elements over #note_outer (to select for click on #note_outer only)
+	// prevent propagation firing of elements over #note_outer (to select for click on #note_outer only)
 	$(document).on('click','#note_lines, #checkbox_ribbon',function(e){
 		e.stopPropagation();
 	});
-
-	//hide dogcal_popup if user clicks elsewhere in window
+	
+	$(document).on('click','#new_meeting',function(e){
+		/*
+		$('#new_meeting_popup').css({
+			'display'		: 'inline-block',
+			'margin-top'	: e.pageY+'px',
+			'margin-left'	: e.pageX+'px'
+		});
+		*/
+	});
+	
+	//---------------------------------------------//
+	//---------------- HIDE POPUPS-----------------//
+	//---------------------------------------------//
 	$(document).on('click','*',function(e){	
+		//con( $(this).attr('class').split(' ') );
 		if ( ! $(this).hasClass('cal_class')  ){
 			$('#dogcal_popup').hide();	
 			cal_showing = false;
 		}
-	});
-	
-	
-	function show_options_box( c,e ){
-		var x = e.pageX;
-		var y = e.pageY;
-		con( line_list[c] );
-		
-	}
-	//display note options on checkbox click; get array position of note and send to show_options_box
-	$(document).on('click','.note_bullet',function(e){
-		if ( $(this).hasClass('nb_on') ){
-			sections_check('pass');
-			var this_id = this.id;
-			var c = 0;
-			$('.nb_on').each(function(){
-				this_id == this.id ? show_options_box(c,e) : c++;
-			});	
+		if ( ! $(this).hasClass('options_box') ){
+			$('#options_box').hide();
+			$('.nb_on').removeClass('nb_clicked');
+			//$('#options_list').hide();
+			options_box_showing = null;
+		}
+		if ( ! $(this).hasClass('new_meeting_popup') ){
+			$('#new_meeting_popup').hide();
 		}
 	});
+	
+	
+	//---------------------------------------------//
+	//-------------- SHOW OPTIONS_BOX--------------//
+	//---------------------------------------------//
+	$(document).on('click','.nb_on',function(e){
+		$('.nb_on').removeClass('nb_clicked');
+		con(options_box_showing);
+		if ( this.id == options_box_showing ){
+			con('yeah');
+			$('#options_box').hide();
+			options_box_showing = null;
+			return;
+		}
+		$(this).addClass('nb_clicked');
+		sections_check('pass');
+		var this_id = this.id;
+		var c = 0;
+		$('.nb_on').each(function(){
+			this_id == this.id ? show_options_box(c,e,this.id) : c++;
+		});	
+	});//------------------------------------------//
+	//---------------------------------------------//
 
 //----------------------------------------------------------//
-//--------------- KEYBOARD EVENT HANDLERS ----------------//
+//---------------- KEYBOARD EVENT HANDLERS -----------------//
 //----------------------------------------------------------//
 
-	//handle escape keypress (hide dogcal if open)
+	//----- ESC: hide popups
 	$(document).keydown(function(e){
 		switch (e.which){
 			case 27:	// ESC key
 				$('#dogcal_popup').hide();
 				cal_showing = false;
+				$('#options_box').hide();
+				$('.nb_on').removeClass('nb_clicked');
+				options_box_showing = null;
 		}
 	});
 

@@ -3,36 +3,42 @@
 var set_name = '';
 var set_date = '';
 
-function show_note(note){
-	//
-	// add js_input prompt here if there is unsaved data before replacing
-	//
+function show_note(data){
+
 	
-	$('#name_ta').val( set_name );
-	$('#set_meeting').val( set_date );
+	$('.nb_on').removeClass('nb_on nb_checked');
+	
+	var note = data.note;
+	var nb_checked_line_id_list = data.nb_checked_line_id_list;
+	con(nb_checked_line_id_list);
+	
+	$('#name_ta_dummy').val( set_name );
+	$('#set_meeting_dummy').val( set_date );
 	
 	$('#note_lines').height( $('#note_outer').height() );
-	con( $('#note_outer').height() );
-	con( $('#note_lines').height() );
+
 	$('#note_lines').val(note);
 	
+	nb_checked_line_id_list.forEach(function(el){
+		//con(el);
+		$('#'+el).addClass('nb_checked');
+	});
+	
+	
+	autosave();
+	
 	sections_check(key='pass');
-	/*
-	setTimeout(function(){
-		
-	},100);
-	*/
 }
 
 
 //-------------------RETRIEVE NOTE WHEN DATE IS CLICKED---------------//
 
 
-//$(document).ready(function(){
 	
 $(document).on('click','.date_list_date_inner',function(e){
 	
 	set_date = $(this).html();
+
 	classes = $(this).attr('class').split(' ');
 	
 	for (i = 0; i < classes.length; i++){
@@ -40,7 +46,7 @@ $(document).on('click','.date_list_date_inner',function(e){
 			set_name = classes[i];
 		}
 	}
-
+	
 	$.ajax({
 		method	:	'post',
 		url		:	'dognote.py',
@@ -53,16 +59,15 @@ $(document).on('click','.date_list_date_inner',function(e){
 		},
 		success	:	function(data){
 			
-			note = JSON.parse(data);
+			data = JSON.parse(data);
 			clear_data();
-			show_note(note);
+
+			show_note(data);
+			
 		}
 	});
 });
 	
 	
-//});
-
-
 
 

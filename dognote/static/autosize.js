@@ -1,3 +1,5 @@
+// Code below was modified slightly but remains the work of the listed author
+
 /*!
 	Autosize 3.0.20
 	license: MIT
